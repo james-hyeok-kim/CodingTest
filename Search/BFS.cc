@@ -1,69 +1,69 @@
+#include <iostream>
 #include <vector>
 #include <queue>
-#include <map>
-#include <iostream>
 
 using namespace std;
 
+bool visited[9];
+vector<int> graph[9];
+
 // BFS 함수 정의
-// 매개변수: 그래프(인접 리스트), 시작 노드, 노드 개수
-void bfs(const map<int, vector<int>>& graph, int startNode) {
-    // 1. 큐(queue)와 방문 여부를 확인할 배열을 초기화합니다.
+void bfs(int start) {
     queue<int> q;
-    // 노드 번호에 맞춰 거리를 저장하기 위해 map을 사용 (노드가 0부터 시작하지 않을 수도 있으므로)
-    map<int, int> distance; 
+    q.push(start); // 첫 노드를 queue에 삽입
+    visited[start] = true; // 첫 노드를 방문 처리
 
-    // 모든 노드의 거리를 -1 (미방문 상태)로 초기화
-    for (auto const& [node, neighbors] : graph) {
-        distance[node] = -1;
-    }
-
-    // 2. 시작 노드를 큐에 넣고 방문 처리 및 거리 설정
-    q.push(startNode);
-    distance[startNode] = 0;
-
-    // 3. 큐가 비어있을 때까지 반복
+    // 큐가 빌 때까지 반복
     while (!q.empty()) {
-        // 3-1. 큐에서 현재 노드를 하나 꺼냅니다.
-        int currentNode = q.front();
+        // 큐에서 하나의 원소를 뽑아 출력
+        int x = q.front();
         q.pop();
-
-        cout << "현재 방문 노드: " << currentNode 
-                  << ", 거리: " << distance[currentNode] << endl;
-
-        // 3-2. 현재 노드와 연결된 모든 이웃 노드를 확인
-        // graph.at(currentNode)는 currentNode에 연결된 이웃 노드들의 vector를 반환
-        for (int neighbor : graph.at(currentNode)) {
-            // 3-3. 아직 방문하지 않은 이웃 노드라면,
-            if (distance[neighbor] == -1) {
-                // 거리를 현재 노드 + 1로 설정
-                distance[neighbor] = distance[currentNode] + 1;
-                // 큐에 이웃 노드를 추가
-                q.push(neighbor);
+        cout << x << ' ';
+        // 해당 원소와 연결된, 아직 방문하지 않은 원소들을 큐에 삽입
+        for (int i = 0; i < graph[x].size(); i++) {
+            int y = graph[x][i];
+            if (!visited[y]) {
+                q.push(y);
+                visited[y] = true;
             }
         }
     }
-    
-    cout << "\n--- 최종 결과 ---" << std::endl;
-    cout << "'" << startNode << "' 노드에서 각 노드까지의 최단 거리:" << std::endl;
-    for (auto const& [node, dist] : distance) {
-        cout << node << ": " << dist << endl;
-    }
 }
 
-int main() {
-    // 인접 리스트로 그래프 표현 (map과 vector 사용)
-    map<int, vector<int>> my_graph = {
-        {1, {2, 3}},
-        {2, {1, 4, 5}},
-        {3, {1, 6}},
-        {4, {2}},
-        {5, {2, 6}},
-        {6, {3, 5}}
-    };
-    
-    int start_node = 1;
-    bfs(my_graph, start_node);
+int main(void) {
+  // 노드 1에 연결된 노드 정보 저장 
+  graph[1].push_back(2);
+  graph[1].push_back(3);
+  graph[1].push_back(8);
 
-    return 0;
+  // 노드 2에 연결된 노드 정보 저장 
+  graph[2].push_back(1);
+  graph[2].push_back(7);
+
+  // 노드 3에 연결된 노드 정보 저장 
+  graph[3].push_back(1);
+  graph[3].push_back(4);
+  graph[3].push_back(5);
+
+  // 노드 4에 연결된 노드 정보 저장 
+  graph[4].push_back(3);
+  graph[4].push_back(5);
+
+  // 노드 5에 연결된 노드 정보 저장 
+  graph[5].push_back(3);
+  graph[5].push_back(4);
+
+  // 노드 6에 연결된 노드 정보 저장 
+  graph[6].push_back(7);
+
+  // 노드 7에 연결된 노드 정보 저장 
+  graph[7].push_back(2);
+  graph[7].push_back(6);
+  graph[7].push_back(8);
+
+  // 노드 8에 연결된 노드 정보 저장 
+  graph[8].push_back(1);
+  graph[8].push_back(7);
+
+  bfs(1);
 }
