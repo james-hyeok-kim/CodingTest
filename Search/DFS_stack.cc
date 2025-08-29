@@ -1,36 +1,36 @@
 #include <iostream>
 #include <vector>
 #include <deque>
-#include <queue>
-
-#define MAX 1000
 
 using namespace std;
 
-vector<int> graph[MAX];
-bool visited[MAX];
-deque<int> dq;
-queue<int> q;
+#define MAX 100
 
-int dfs (int start) {
+deque<int> dq;
+bool visited[MAX];
+vector<int> graph[MAX];
+
+void dfs (int start) {
   dq.push_back(start);
-  q.push(start);
   visited[start] = true;
-  while (!dq.empty()) {
-    int x = dq.back();
+  cout << start << " ";
+
+  while(!dq.empty()) {
+    int src = dq.back();
     dq.pop_back();
-    for (int i = 0; i < graph[x].size(); i++) {
-      int y = graph[x][i];
-      if (!visited[y]) {
-        dq.push_back(x);
-        dq.push_back(y);
-        visitied[y] = true;
-        q.push(y);
+    for (int i = 0; i < graph[src].size(); i ++) {
+      int dest = graph[src][i];
+      if (!visited[dest]) {
+        visited[dest] = true;
+        cout << dest << " ";
+        dq.push_back(src);
+        dq.push_back(dest);
         break;
       }
     }
   }
 }
+
 
 int main (void) {
   graph[1].push_back(2);
@@ -58,13 +58,6 @@ int main (void) {
 
   graph[8].push_back(1);
   graph[8].push_back(7);
-  dfs(1);
 
-  int q_size = q.size();
-  cout << " q_size : " << q_size << endl;
-  for (int i = 0; i < q_size; i++) {
-    cout << "queue[" << i << "] = " << q.front() << endl;
-    q.pop();
-  }
-  return 0;
+  dfs(1);
 }
